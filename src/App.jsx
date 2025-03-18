@@ -11,6 +11,8 @@ const App = () => {
     role: "",
   });
   const [showEmployees, setShowEmployees] = useState(false); // State to control visibility
+  const [searchResult, setSearchResult] = useState([]); // State to hold search results
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
   // Fetch the employees.json file on mount
   useEffect(() => {
@@ -34,10 +36,13 @@ const App = () => {
   }, [employees]);
 
   const handleSearch = () => {
-    const found = employees.find(
+    // Use filter to find all employees with the same name
+    const found = employees.filter(
       (emp) => emp.name.toLowerCase() === searchTerm.toLowerCase()
     );
-    alert(found ? JSON.stringify(found, null, 2) : "No match found.");
+    // Set the search results, even if it's an empty array (no matches)
+    setSearchResult(found.length > 0 ? found : "No match found.");
+    setIsModalOpen(true); // Open the modal when search result is set
   };
 
   const handleAddEmployee = () => {
@@ -55,6 +60,12 @@ const App = () => {
     if (savedEmployees) {
       setEmployees(savedEmployees);
     }
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSearchResult([]);
   };
 
   return (
@@ -106,6 +117,36 @@ const App = () => {
                 </li>
               ))}
           </ul>
+        )}
+
+        {/* Modal for search result */}
+        {isModalOpen && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>Search Result</h2>
+              {typeof searchResult === "string" ? (
+                <p>{searchResult}</p> // No match found
+              ) : (
+                <div>
+                  {searchResult.map((emp, index) => (
+                    <div key={index}>
+                      <p>
+                        <strong>Name:</strong> {emp.name}
+                      </p>
+                      <p>
+                        <strong>Department:</strong> {emp.department}
+                      </p>
+                      <p>
+                        <strong>Role:</strong> {emp.role}
+                      </p>
+                      <hr />
+                    </div>
+                  ))}
+                </div>
+              )}
+              <button onClick={closeModal}>Close</button>
+            </div>
+          </div>
         )}
       </div>
 
