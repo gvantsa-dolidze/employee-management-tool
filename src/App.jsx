@@ -127,7 +127,7 @@ const App = () => {
               <h2>Search Result</h2>
               {Array.isArray(searchResult) ? (
                 searchResult.map((result, index) => (
-                  <div key={index}>
+                  <div key={index} className="border">
                     <p>
                       <strong>Name:</strong> {result.name}
                     </p>
