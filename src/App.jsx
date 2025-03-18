@@ -1,12 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 
-const initialEmployees = [
-  { name: "Alice", department: "HR", role: "Manager" },
-  { name: "Bob", department: "Engineering", role: "Developer" },
-  { name: "Charlie", department: "Sales", role: "Representative" },
-];
-
 const App = () => {
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,16 +12,22 @@ const App = () => {
   });
   const [showEmployees, setShowEmployees] = useState(false); // State to control visibility
 
+  // Fetch the employees.json file on mount
   useEffect(() => {
     const savedEmployees = JSON.parse(localStorage.getItem("employees"));
     if (savedEmployees && savedEmployees.length > 0) {
       setEmployees(savedEmployees);
     } else {
-      setEmployees(initialEmployees);
+      // Fetch the employees.json file if no data is found in localStorage
+      fetch("/employees.json")
+        .then((response) => response.json())
+        .then((data) => setEmployees(data))
+        .catch((error) => console.error("Error loading employees:", error));
     }
   }, []);
 
   useEffect(() => {
+    // Save the employees data to localStorage whenever it changes
     if (employees.length > 0) {
       localStorage.setItem("employees", JSON.stringify(employees));
     }
