@@ -10,18 +10,16 @@ const App = () => {
     department: "",
     role: "",
   });
-  const [showEmployees, setShowEmployees] = useState(false); // State to control visibility
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const [searchResult, setSearchResult] = useState(null); // State to hold search result
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [showEmployees, setShowEmployees] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [searchResult, setSearchResult] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Fetch the employees.json file on mount
   useEffect(() => {
     const savedEmployees = JSON.parse(localStorage.getItem("employees"));
     if (savedEmployees && savedEmployees.length > 0) {
       setEmployees(savedEmployees);
     } else {
-      // Fetch the employees.json file if no data is found in localStorage
       fetch("/employees.json")
         .then((response) => response.json())
         .then((data) => setEmployees(data))
@@ -30,7 +28,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // Save the employees data to localStorage whenever it changes
     if (employees.length > 0) {
       localStorage.setItem("employees", JSON.stringify(employees));
     }
@@ -40,30 +37,28 @@ const App = () => {
     const found = employees.filter(
       (emp) => emp.name.toLowerCase() === searchTerm.toLowerCase()
     );
-    // Instead of alert, set the found result to state
     setSearchResult(found.length > 0 ? found : "No match found.");
-    setIsModalOpen(true); // Open the modal when search result is set
+    setIsModalOpen(true);
   };
 
   const handleAddEmployee = () => {
     if (!newEmployee.name || !newEmployee.department) {
-      setErrorMessage("Name and department cannot be empty"); // Set error message
+      setErrorMessage("Name and department cannot be empty");
       return;
     }
-    setErrorMessage(""); // Clear the error message if everything is valid
+    setErrorMessage("");
     setEmployees([...employees, newEmployee]);
     setNewEmployee({ name: "", department: "", role: "" });
   };
 
   const handleListEmployees = () => {
-    setShowEmployees(true); // Show the employee list when the button is clicked
+    setShowEmployees(true);
     const savedEmployees = JSON.parse(localStorage.getItem("employees"));
     if (savedEmployees) {
       setEmployees(savedEmployees);
     }
   };
 
-  // Close modal
   const closeModal = () => {
     setIsModalOpen(false);
     setSearchResult(null);
@@ -101,7 +96,6 @@ const App = () => {
           />
         </div>
 
-        {/* Conditionally render employee list */}
         {showEmployees && (
           <ul className="employee-list">
             {employees
@@ -120,7 +114,6 @@ const App = () => {
           </ul>
         )}
 
-        {/* Modal for search result */}
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal">
@@ -140,7 +133,7 @@ const App = () => {
                   </div>
                 ))
               ) : (
-                <p>{searchResult}</p> // No match found
+                <p>{searchResult}</p>
               )}
               <button onClick={closeModal}>Close</button>
             </div>
@@ -177,7 +170,6 @@ const App = () => {
           />
           <button onClick={handleAddEmployee}>Add Employee</button>
 
-          {/* Display error message */}
           {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
       </div>
