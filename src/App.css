@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   align-items: flex-start;
   font-family: Arial, sans-serif;
@@ -91,4 +91,54 @@ input {
 
 .modal button:hover {
   background-color: #0056b3;
+}
+
+/* Add this to your App.css to enable scrolling */
+
+.employee-list {
+  max-height: 300px; /* Set the maximum height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+  list-style-type: none;
+}
+
+.employee-item {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 400px;
+  max-height: 70%; /* Limit modal height */
+  overflow-y: auto; /* Enable scrolling in modal if content is too long */
+}
+
+.add-employee-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-employee-form input {
+  margin: 5px 0;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
 }

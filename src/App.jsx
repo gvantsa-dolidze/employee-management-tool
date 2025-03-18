@@ -11,7 +11,8 @@ const App = () => {
     role: "",
   });
   const [showEmployees, setShowEmployees] = useState(false); // State to control visibility
-  const [searchResult, setSearchResult] = useState([]); // State to hold search results
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [searchResult, setSearchResult] = useState(null); // State to hold search result
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
   // Fetch the employees.json file on mount
@@ -36,20 +37,20 @@ const App = () => {
   }, [employees]);
 
   const handleSearch = () => {
-    // Use filter to find all employees with the same name
     const found = employees.filter(
       (emp) => emp.name.toLowerCase() === searchTerm.toLowerCase()
     );
-    // Set the search results, even if it's an empty array (no matches)
+    // Instead of alert, set the found result to state
     setSearchResult(found.length > 0 ? found : "No match found.");
     setIsModalOpen(true); // Open the modal when search result is set
   };
 
   const handleAddEmployee = () => {
     if (!newEmployee.name || !newEmployee.department) {
-      alert("Name and department cannot be empty");
+      setErrorMessage("Name and department cannot be empty"); // Set error message
       return;
     }
+    setErrorMessage(""); // Clear the error message if everything is valid
     setEmployees([...employees, newEmployee]);
     setNewEmployee({ name: "", department: "", role: "" });
   };
@@ -65,7 +66,7 @@ const App = () => {
   // Close modal
   const closeModal = () => {
     setIsModalOpen(false);
-    setSearchResult([]);
+    setSearchResult(null);
   };
 
   return (
@@ -124,25 +125,22 @@ const App = () => {
           <div className="modal-overlay">
             <div className="modal">
               <h2>Search Result</h2>
-              {typeof searchResult === "string" ? (
-                <p>{searchResult}</p> // No match found
+              {Array.isArray(searchResult) ? (
+                searchResult.map((result, index) => (
+                  <div key={index}>
+                    <p>
+                      <strong>Name:</strong> {result.name}
+                    </p>
+                    <p>
+                      <strong>Department:</strong> {result.department}
+                    </p>
+                    <p>
+                      <strong>Role:</strong> {result.role}
+                    </p>
+                  </div>
+                ))
               ) : (
-                <div>
-                  {searchResult.map((emp, index) => (
-                    <div key={index}>
-                      <p>
-                        <strong>Name:</strong> {emp.name}
-                      </p>
-                      <p>
-                        <strong>Department:</strong> {emp.department}
-                      </p>
-                      <p>
-                        <strong>Role:</strong> {emp.role}
-                      </p>
-                      <hr />
-                    </div>
-                  ))}
-                </div>
+                <p>{searchResult}</p> // No match found
               )}
               <button onClick={closeModal}>Close</button>
             </div>
@@ -155,7 +153,7 @@ const App = () => {
         <div className="add-employee-form">
           <input
             type="text"
-            placeholder="Name"
+            placeholder="First Name"
             value={newEmployee.name}
             onChange={(e) =>
               setNewEmployee({ ...newEmployee, name: e.target.value })
@@ -178,6 +176,9 @@ const App = () => {
             }
           />
           <button onClick={handleAddEmployee}>Add Employee</button>
+
+          {/* Display error message */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
       </div>
     </div>
