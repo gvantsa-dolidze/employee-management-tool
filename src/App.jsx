@@ -153,7 +153,7 @@ const App = () => {
         <div className="add-employee-form">
           <input
             type="text"
-            placeholder="First Name"
+            placeholder="Name"
             value={newEmployee.name}
             onChange={(e) =>
               setNewEmployee({ ...newEmployee, name: e.target.value })
