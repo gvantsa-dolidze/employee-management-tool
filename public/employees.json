@@ -1,0 +1,10 @@
+[
+    { "name": "Alice", "department": "HR", "role": "Manager" },
+    { "name": "Bob", "department": "Engineering", "role": "Developer" },
+    { "name": "Charlie", "department": "Sales", "role": "Representative" },
+    { "name": "David", "department": "Sales", "role": "Sales Manager" },
+    { "name": "Eve", "department": "Engineering", "role": "QA Tester" },
+    { "name": "Frank", "department": "Marketing", "role": "Marketing Specialist" },
+    { "name": "Grace", "department": "HR", "role": "Recruiter" },
+    { "name": "Hannah", "department": "Sales", "role": "Account Executive" }
+  ]
